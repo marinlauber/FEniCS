@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>FEniCS Workshop</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link rel="stylesheet" href="css/theme/serif.css" id="theme">
+
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+
+				<section>
+					<h1><center>FEniCS</center></h1>
+					<br>
+					<h3><center>(Finite Element Computer Software)</center><h3>
+					<br>
+					<h3><center>Automated Solution of Differential Equations<br>by the Finite Element Method</center><h3>
+					<br>
+					<h2><center>By Vanessa Nehruji and Marin Lauber</center></h2>
+
+					<img class="plain"  src="fenics.png",
+						style="position: absolute;top: -80px; left: 400px;"/>
+					<img class="plain"  src="fenics.png",
+						style="position: absolute;top: -80px; right: 400px;"/>
+					
+				</section>
+
+				<section data-fullscreen>
+					<video autoplay loop muted id="myVideo" controls>
+						<source src="Numerical simulation of liquid crystal elastomer.mp4" type="video/mp4">
+						Your browser does not support HTML5 video.
+					</video>
+				</section>
+
+				<section data-fullscreen>
+					<video autoplay loop muted id="myVideo" controls>
+						<source src="Rising bubble - FEM FENICS level-set.mp4" type="video/mp4">
+						Your browser does not support HTML5 video.
+					</video>
+				</section>
+
+				<section data-fullscreen>
+					<video autoplay loop muted id="myVideo" controls>
+						<source src="Fluid-Structure Interaction in FEniCS.mp4" type="video/mp4">
+						Your browser does not support HTML5 video.
+					</video>
+				</section>
+
+				<section data-fullscreen>
+					<video autoplay loop muted id="myVideo" controls>
+						<source src="Simulation of turbulent flow past a landing gear.mp4" type="video/mp4">
+						Your browser does not support HTML5 video.
+					</video>
+				</section>
+
+				<section>
+					<h1><center>Workshop Aims</center></h1>
+					<br><br>
+						<h3><ul>
+							<dev class="fragment">
+								<li>Use the basic meshing tools to create simple domains</li>
+							<br>
+							</dev><dev class="fragment">
+								<li>Derive the variational form of the Poisson and Heat equations</li>
+							<br>
+							</dev><dev class="fragment">
+								<li>Input the variational from into FEniCS</li>
+							<br>
+							</dev><dev class="fragment">
+								<li>Enforce the boundary conditions of the problem</li>
+							<br>
+							</dev><dev class="fragment">
+								<li>Solve time-dependent PDEs</li>
+							</dev>
+						</ul></h3>
+				</section>
+
+				<section>
+					<h1><center>What is FEniCS?</center></h1>
+					<br><br>
+					<h3>
+						<div style="width: 50%; float: left;">
+						<div class="fragment">
+							<span style="border: 5px solid red; padding: 20px;">Mesh</span>
+						<br><br><br>
+						</div>
+						<div class="fragment">
+							<span style="border: 5px solid green; padding: 20px;">Boundary Conditions</span>
+						<br><br><br>
+						</div>
+						<div class="fragment">
+							<span style="border: 5px solid blue; padding: 20px;">Variational Form</span>
+						</div>
+
+						</div>
+						<div style="width: 50%; float: right;">
+						<div class="fragment">
+							\[
+								-\nabla^2u  = f \qquad \text{in}\,\Omega
+							\]
+						<br><br><br>
+						</div>
+						<div class="fragment">
+							<svg height="210" width="1000" style="position:absolute; top: 550px; left: 950px;">
+								<line x1="200" y1="50" x2="800" y2="50" style="stroke:rgb(255,0,0);stroke-width:5" />
+								<circle cx="200" cy="50" r="6" stroke="black" stroke-width="3" fill="black" />
+								<circle cx="400" cy="50" r="6" stroke="black" stroke-width="3" fill="black" />
+								<circle cx="600" cy="50" r="6" stroke="black" stroke-width="3" fill="black" />
+								<circle cx="800" cy="50" r="6" stroke="green" stroke-width="3" fill="green" />
+							</svg>
+						<br><br><br>
+						</div>
+						<div class="fragment">
+						<span style="position:absolute; top:600px; left:1125px">
+							\[
+								u_0
+							\]
+						</span>
+						<span style="position:absolute; top:600px; left:1325px">
+							\[
+								u_1
+							\]
+						</span>
+						<span style="position:absolute; top:600px; left:1525px">
+							\[
+								u_2
+							\]
+						</span>
+						<span style="position:absolute; top:600px; left:1725px; color: green;">
+							\[
+								u_3 = 0
+							\]
+						</span>
+						</div>
+						<div class="fragment" style="position:absolute; top: 850px; left: 1025px; color: blue;">
+							\[
+								\int_{\Omega} (\nabla u \cdot\nabla v)\,\text{d}\Omega = \int_{\Omega} \,f \,v\,\text{d}\Omega\,.
+							\]
+						</div>
+						</h3>
+				</section>
+
+				<section>
+					<h1><center>Why use FEniCS?</center></h1>
+					<br>
+					<h3><ul>
+						<li>User-friendly FE formulation (black box!)</li>
+							<br>
+						<div class="fragment">
+							<li>Open-source computing platform for solving PDEs using FE</li>
+							<br>
+						</div>
+						<div class="fragment">
+							<li>Can be programmed in Python and C++</li>
+							<br>
+						</div><div class="fragment">
+							<li>Very compact notation, close to the mathematical formulation</li>
+						</div>
+					</ul></h3>
+				</section>
+
+				<section>
+					<h1><center>Variational Formulation</center></h1>
+					<br><h3>
+						Poisson's equation on an arbitrary domain $\Omega$
+						<br><br>
+					<div class="fragment">
+						\[
+							-\nabla^2u_e  = f \qquad \text{in}\,\Omega\,,
+						\]
+						<br>
+					</div>
+					<div class="fragment">
+						with boundary conditions
+					<br><br>
+						\[
+							u_e = u_D \qquad \text{on}\,\partial\Omega\,,
+						\]
+						<br>
+					where $u_e$ is the unknown field, and $f$ a source term.
+					</div></h3>
+				</section>
+				
+				<section>
+					<h1><center>Variational Formulation</center></h1>
+					<br><h3>
+						Assume a displacement field $u$
+					<br><br>
+						\[ \nabla^2u + f  = r \neq 0. \]
+					<br>
+					<div class="fragment">
+						Aim at having $r=0$ on average on $\Omega$
+					<br><br>
+						\[ \int_{\Omega} (\nabla^2u + f) \,v\,\text{d}\Omega = 0. \]
+					</div><br>
+					<div class="fragment">
+					(Note: test function is completely arbitrary)
+					</div></h3>
+				</section>
+
+				<section>
+					<h1><center>Variational Formulation</center></h1>
+					<br><h3>
+					This can be re-arranged using the divergence theorem
+					<br><br>
+						\[ \int_{\Omega} (\nabla^2u + f) \,v\,\text{d}\Omega =
+						\oint_{\partial\Omega} v\frac{\partial u}{\partial n} \,\text{d}\partial\Omega -
+						\int_{\Omega} (\nabla u \cdot\nabla v)\,\text{d}\Omega + \int_{\Omega} \,f \,v\,\text{d}\Omega = 0 \]
+					<br>
+					<div class="fragment">
+						or, by recalling that $v$ vanishes on the boundary $\partial\Omega$
+					<br><br>
+						\[ \int_{\Omega} (\nabla u \cdot\nabla v)\,\text{d}\Omega = \int_{\Omega} \,f \,v\,\text{d}\Omega\,. \]
+					</div></h3>
+				</section>
+
+				<section>
+					<h1><center>Continuous Form</center></h1>
+					<br><h3>
+					Restate the variational problem to: find $u \in V$ such that 
+					<br><br>
+					\[ \int_{\Omega} (\nabla u \cdot\nabla v)\,\text{d}\Omega = \int_{\Omega} \,f \,v\,\text{d}\Omega\, 
+					\qquad\forall v \in \hat{V}\,, \]
+					<br>
+					<div class="fragment">
+					where $V$ and $\hat{V}$ are the trial and test space defined as
+					<br><br>
+					\[\begin{split}
+							V & = \{ v \in H^{1}(\Omega):v=u_D \, \text{on}\, \partial\Omega\}\,,\\
+							\hat{V} & = \{ v \in H^{1}(\Omega):v=0 \, \text{on}\, \partial\Omega\}\,.
+					\end{split}\]
+					</div></h3>
+				</section>
+
+				<section>
+					<h1><center>Discrete Form</center></h1>
+					<br><h3>
+					Approximate the continuous variational problem into a discrete variational problem
+					<br><br>
+					\[\begin{split} 
+						\hat{V}_h \subset & \hat{V} \\
+						V_h \subset & V \\
+					\end{split}\]
+					<br>
+					<div class="fragment">
+					Find $u_h \in V_h \subset V$ such that
+					<br><br>
+					\[ \int_{\Omega} (\nabla u_h \cdot\nabla v)\,\text{d}\Omega = \int_{\Omega} \,f \,v\,\text{d}\Omega\, 
+					\qquad\forall v \in \hat{V}_h\subset\hat{V}. \]
+					</div></h3>
+				</section>
+
+				<section>
+					<h1><center>FEniCS Formulation</center></h1>
+					<br><h3>
+					The variational problem has to be recast in the following form
+					<br><br>
+					\[ a(u, v) = L(v)\,,\]
+					<br>
+					<div class="fragment">
+						for our problem, this gives
+					<br><br>
+						\[\begin{split}
+							a(u, v) & = \int_{\Omega} (\nabla u \cdot\nabla v)\,\text{d}\Omega\,,\\
+							L(v) & = \int_{\Omega} \,f \,v\,\text{d}\Omega\,.
+						\end{split}\]
+					</dic></h3>
+				</section>
+
+				<section>
+					<h1><center>Summary</center></h1>
+					<br>
+					<ol><h3>
+						<div class="fragment">
+						<li>Turn the PDE into a discrete variational problem:
+							<br><br>
+							\[ a(u, v) = L(v) \]
+						</li>
+						</div><div class="fragment"><br>
+						<li>Specify the choice of function spaces ($V$ and $\hat{V}$)</li>
+						</div><div class="fragment"><br>
+						<li>Apply the boundary conditions on the function spaces</li>
+						</div><div class="fragment"><br>
+						<li>Solve the system!</li>
+						</div><div class="fragment"><br>
+						<li>Post-process the results</li>
+						</div></h3>
+					</ol>
+				</section>
+
+				<section>
+					<h1><center>Exercises!</center></h1>
+				</section>
+
+				<section>
+					<h1><center>IVP in FEniCS</center></h1>
+					<br><h3>
+					<div class="fragment">
+					The diffusion of a field $u$ is governed by the heat equation
+					<br><br>
+					\[ \frac{\partial u}{\partial t} - \alpha\nabla^2u = f, \,\, \text{with}\,\,u_0 
+					\,\,\,\text{on}\,\,\,\Omega\,\,\,\text{and}\,\,\,u_D\,\,\text{on}\,\,\,\partial\Omega \]
+					</div><div class="fragment">
+					<br>
+					Backward Euler to discretize in time
+					<br><br>
+					\[ \frac{\partial u}{\partial t} \approx \frac{u^{n+1}- u^n}{\Delta t} =
+					\alpha\nabla^2u^{n+1} + f^{n+1} \] 
+					</div>
+					</h3>
+				</section>
+
+				<section>
+					<h1><center>Variational Formulation</center></h1>
+					<h3><br>
+					Weak form for IVP
+					<br><br>
+					\[ \int_\Omega (u^{n+1}v +\alpha\Delta t(\nabla u^{n+1}\cdot\nabla v) )\,d\Omega =  \int_\Omega (u^{n} + \Delta tf^{n+1})v\,d\Omega\]
+					<br>
+					<div class="fragment">
+					or in FEniCS notation
+					<br><br>
+					\[\begin{split}
+					a(u^{n+1}, v) & = \int_\Omega (u^{n+1}v +\alpha\Delta t(\nabla u^{n+1}\cdot\nabla v) )\,d\Omega \\
+					L_{n+1}(v) & = \int_\Omega (u^{n} + \Delta tf^{n+1})v\,d\Omega
+					\end{split}\]
+					</div></h3>
+				</section>
+
+				<section>
+					<h1><center>Summary</center></h1>
+					<br>
+					<ol><h3>
+						<div class="fragment">
+						<li>Derive the variational problem as in the steady case</li>
+						</div><div class="fragment"><br>
+						<li>Use the intial condition to initiate the solution</li>
+						</div><div class="fragment"><br>
+						<li>Solve the variational problem</li>
+						</div><div class="fragment"><br>
+						<li>Update the solution for the next iteration</li>
+						</div><div class="fragment"><br>
+						<li>Loop until solved</li>
+						</div></h3>
+					</ol>
+				</section>
+
+				<section>
+					<h1><center>Exercises!</center></h1>
+				</section>
+
+				<section>
+					<h1><center>Done!</center></h1>
+					<br><br><h3>
+						<ul>
+						<li>Use the basic meshing tools to create simple domains</li>
+							<br>
+						<li>Derive the variational form of the Poisson and Heat equations</li>
+							<br>
+						<li>Input the variational form into FEniCS.</li>
+							<br>
+						<li>Enforce the boundary conditions of the problem</li>
+							<br>
+						<li>Solve time-dependent PDEs</li>
+					</ul></h3>
+				</section>
+
+				<section>
+						<h1><center>Thanks!</center></h1>
+				</section>
+
+				<section data-fullscreen>
+					<video autoplay muted id="myVideo" controls>
+						<source src="Finite element simulation of vorticity past airplane.mp4" type="video/mp4">
+						Your browser does not support HTML5 video.
+					</video>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Settings for the presentation 
+
+			Reveal.initialize({
+
+				// The "normal" size of the presentation, aspect ratio will be preserved
+				// when the presentation is scaled to fit different resolutions. Can be
+				// specified using percentage units.
+				width: 1920,
+				height: 1080,
+
+				// Factor of the display size that should remain empty around the content
+				margin: 0.15,
+
+				// Bounds for smallest/largest possible scale to apply to content
+				minScale: 0.2,
+				maxScale: 1.5,
+
+				math: {
+					// mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+					config: 'TeX-AMS_HTML-full'
+				},
+
+				dependencies: [
+					{ src: 'lib/js/classList.js' },
+					{ src: 'plugin/math/math.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad();}},
+					{ src: '../reveal.js-plugins/fullscreen/fullscreen.js' },
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
